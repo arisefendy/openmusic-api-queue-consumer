@@ -12,7 +12,7 @@ class PlaylistsService {
     };
 
     const resultPlaylist = await this._pool.query(queryPlaylist);
-    const playlist = resultPlaylist.rows[0];
+    const mappingPlaylist = resultPlaylist.rows[0];
 
     const querySong = {
       text: `SELECT songs.id, songs.title, songs.performer FROM songs
@@ -22,14 +22,9 @@ class PlaylistsService {
     };
 
     const resultSong = await this._pool.query(querySong);
+    mappingPlaylist.songs = resultSong.rows;
 
-    return {
-      playlist: {
-        id: playlist.id,
-        name: playlist.name,
-        songs: resultSong.rows,
-      },
-    };
+    return { playlist: mappingPlaylist };
   }
 }
 
